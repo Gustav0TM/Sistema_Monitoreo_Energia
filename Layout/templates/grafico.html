@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h2 style="text-align:center; margin-bottom: 20px;">📊 Análisis Inteligente de Consumo de Energía</h2>
+
+<div style="max-width:1100px; margin: 0 auto 20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center;">
+    <div id="grupo-dispositivos">
+        <label for="dispositivo1">🔌 Dispositivo 1:</label><br>
+        <select id="dispositivo1"></select>
+    </div>
+
+    <div id="grupo-dispositivos2">
+        <label for="dispositivo2">🔌 Dispositivo 2:</label><br>
+        <select id="dispositivo2"></select>
+    </div>
+
+    <div>
+        <label for="tipo-grafico">📈 Tipo de Gráfico:</label><br>
+        <select id="tipo-grafico">
+            <option value="barras">Barras (Comparativa)</option>
+            <option value="pastel">Pastel (Consumo Global)</option>
+            <option value="historial">Historial (Tiempo Real)</option>
+        </select>
+    </div>
+</div>
+
+<div style="max-width:1100px; margin: 0 auto;">
+    <canvas id="graficoCanvas" width="900" height="400"></canvas>
+</div>
+
+<!-- Librería Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/grafico.js') }}"></script>
+
+<script>
+    // 👁️ Ocultar o mostrar los selectores según el tipo de gráfico
+    document.addEventListener('DOMContentLoaded', () => {
+        const tipoSelect = document.getElementById('tipo-grafico');
+        const grupo1 = document.getElementById('grupo-dispositivos');
+        const grupo2 = document.getElementById('grupo-dispositivos2');
+
+        function actualizarVisibilidad() {
+            const tipo = tipoSelect.value;
+            if (tipo === 'barras') {
+                grupo1.style.display = 'block';
+                grupo2.style.display = 'block';
+            } else {
+                grupo1.style.display = 'none';
+                grupo2.style.display = 'none';
+            }
+        }
+
+        tipoSelect.addEventListener('change', actualizarVisibilidad);
+        actualizarVisibilidad(); // inicial
+    });
+</script>
+{% endblock %}

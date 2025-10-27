@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Monitoreo Inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <header>
+        <h1>💡 Sistema de Monitoreo Inteligente para la Gestión y Optimización del Consumo de Energía en Hogares</h1>
+        {% if session.get('usuario') %}
+        <nav>
+            <a href="{{ url_for('monitor.principal') }}">Principal</a> |
+            <a href="{{ url_for('monitor.grafico') }}">Gráficos</a> |
+            <a href="{{ url_for('reporte.registros') }}">Registros</a> |
+            <a href="{{ url_for('login.logout') }}">Cerrar sesión</a>
+        </nav>
+        {% endif %}
+    </header>
+
+    <main>
+        {% block contenido %}{% endblock %}
+    </main>
+</body>
+</html>

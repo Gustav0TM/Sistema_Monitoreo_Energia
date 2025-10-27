@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block contenido %}
+
+<h2 class="titulo-pagina">📄 Historial de Reportes del Sistema</h2>
+
+<!-- ================== INDICADORES ================== -->
+{% if mayor_consumo_total %}
+<p>💡 Mayor consumo registrado en el último reporte: 
+    <b>{{ mayor_consumo_total.nombre }} ({{ mayor_consumo_total.potencia }} W)</b>
+    {% if mayor_consumo_total.potencia > 1800 %} ⚠️ Sobreconsumo detectado{% endif %}
+</p>
+
+<!-- Mostrar gráfico inline -->
+{% if grafico_path %}
+<div style="text-align:center; margin-bottom:20px;">
+    <img src="{{ url_for('static', filename='reports/grafico_consumo.png') }}" alt="Gráfico Mayor Consumo" style="width:300px;">
+</div>
+{% endif %}
+
+{% else %}
+<p>💡 No se han registrado lecturas todavía.</p>
+{% endif %}
+
+<!-- ================== REPORTES PDF ================== -->
+<section class="seccion-reportes">
+    <h3>📂 Reportes Generados</h3>
+    <p>Genera un nuevo reporte o descarga los anteriores:</p>
+
+    <!-- Botón para generar nuevo PDF -->
+    <a href="{{ url_for('reporte.generar_reporte_pdf') }}" class="btn-descargar">🆕 Generar nuevo reporte PDF</a>
+
+    {% if reportes %}
+    <div class="tabla-contenedor">
+        <table id="tabla-reportes" class="tabla-estilo">
+            <thead>
+                <tr>
+                    <th>Nombre del reporte</th>
+                    <th>Fecha de creación</th>
+                    <th>Descargar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for archivo in reportes %}
+                <tr>
+                    <td>{{ archivo }}</td>
+                    <td>
+                        {% set partes = archivo.replace('.pdf','').split('_') %}
+                        {% if partes|length >= 3 %}
+                            {{ partes[1].replace('-', '/') }} {{ partes[2].replace('-', ':') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('static', filename='reports/' ~ archivo) }}" download class="btn-descargar">⬇️ Descargar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No se han generado reportes todavía. ¡Crea el primero!</p>
+    {% endif %}
+</section>
+
+<!-- ================== ESTILOS ================== -->
+<style>
+.titulo-pagina { text-align:center; margin-bottom:20px; }
+.tabla-contenedor { display:flex; justify-content:center; }
+.tabla-estilo { border-collapse:collapse; width:90%; max-width:1000px; text-align:center; margin-bottom:20px; background-color:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.1); border-radius:8px; overflow:hidden; }
+.tabla-estilo thead { background-color:#007bff; color:white; }
+.tabla-estilo th, .tabla-estilo td { padding:10px; border:1px solid #ddd; }
+.btn-descargar { display:inline-block; background-color:#28a745; color:white; padding:8px 15px; border-radius:6px; text-decoration:none; margin-bottom:10px; }
+.btn-descargar:hover { background-color:#218838; }
+</style>
+
+{% endblock %}

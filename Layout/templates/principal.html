@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<h2>⚡ Estado de Dispositivos</h2>
+
+<table id="tabla-dispositivos">
+    <thead>
+        <tr>
+            <th>Dispositivo</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Voltaje (V)</th>
+            <th>Corriente (A)</th>
+            <th>Potencia (W)</th>
+            <th>Frecuencia (Hz)</th>
+            <th>Alertas</th>
+        </tr>
+    </thead>
+    <tbody id="cuerpo-tabla"></tbody>
+</table>
+
+<div id="sugerencias" class="sugerencias"></div>
+
+<script>
+function actualizarTabla() {
+    fetch('/api/simular')
+        .then(response => response.json())
+        .then(data => {
+            const cuerpo = document.getElementById('cuerpo-tabla');
+            const sugerenciasDiv = document.getElementById('sugerencias');
+            cuerpo.innerHTML = '';
+            sugerenciasDiv.innerHTML = '';
+
+            data.forEach(d => {
+                const fila = document.createElement('tr');
+                if (d.alertas && d.alertas.length > 0) fila.classList.add('alerta');
+
+                fila.innerHTML = `
+                    <td>${d.nombre}</td>
+                    <td>${d.tipo}</td>
+                    <td>${d.estado}</td>
+                    <td>${d.voltaje}</td>
+                    <td>${d.corriente}</td>
+                    <td>${d.potencia}</td>
+                    <td>${d.frecuencia}</td>
+                    <td>${d.alertas ? d.alertas.join('<br>') : ''}</td>
+                `;
+                cuerpo.appendChild(fila);
+
+                if (d.sugerencia) {
+                    const p = document.createElement('p');
+                    p.innerHTML = "💡 " + d.sugerencia;
+                    sugerenciasDiv.appendChild(p);
+                }
+            });
+        })
+        .catch(err => console.error('❌ Error al actualizar lecturas:', err));
+}
+
+actualizarTabla();
+setInterval(actualizarTabla, 2000);
+</script>
+{% endblock %}
