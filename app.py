@@ -56,6 +56,8 @@ def hilo_generar_datos():
 # EJECUCIÓN PRINCIPAL
 # -------------------------------------------------------------------
 if __name__ == '__main__':
-    print("🚀 Sistema de Monitoreo Inteligente ejecutándose en http://127.0.0.1:5000/login")
+    print("🚀 Sistema de Monitoreo Inteligente ejecutándose...")
     threading.Thread(target=hilo_generar_datos, daemon=True).start()
-    app.run(debug=True)
+
+    port = int(os.environ.get("PORT", 5000))  # Render asigna este puerto automáticamente
+    app.run(host='0.0.0.0', port=port, debug=False)
