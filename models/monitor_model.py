@@ -7,7 +7,7 @@ import threading
 LIMITE_VOLT = 230
 LIMITE_POTENCIA = 1800
 LIMITE_CORRIENTE = 10.0
-MAX_LECTURAS = 200  # máximo de lecturas por dispositivo
+MAX_LECTURAS = 100  # máximo de lecturas por dispositivo
 
 # Lock para evitar conflictos en el hilo
 lock = threading.Lock()

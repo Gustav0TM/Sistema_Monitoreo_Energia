@@ -1,5 +1,4 @@
 import sqlite3
-from datetime import datetime
 import os
 
 DB_PATH = os.path.join(os.getcwd(), 'energia.db')
@@ -30,17 +29,17 @@ def inicializar_bd():
 
     # Tabla lecturas
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS lecturas (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        dispositivo_id INTEGER,
-        voltaje REAL,
-        corriente REAL,
-        potencia REAL,
-        estado TEXT,
-        frecuencia REAL,
-        fecha TEXT,
-        hora TEXT,
-        FOREIGN KEY(dispositivo_id) REFERENCES dispositivos(id)
+        CREATE TABLE IF NOT EXISTS lecturas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            dispositivo_id INTEGER,
+            voltaje REAL,
+            corriente REAL,
+            potencia REAL,
+            estado TEXT,
+            frecuencia REAL,
+            fecha TEXT,
+            hora TEXT,
+            FOREIGN KEY(dispositivo_id) REFERENCES dispositivos(id)
         )
     """)
 
@@ -49,6 +48,24 @@ def inicializar_bd():
     if not cursor.fetchone():
         cursor.execute("INSERT INTO usuarios (usuario, password) VALUES (?, ?)", ('admin', 'admin123'))
         print("👤 Usuario administrador creado: admin / admin123")
+
+    # Insertar dispositivos actuales
+    dispositivos_actuales = [
+        ("Tuya1", "Enchufe 1"),
+        ("Tuya2", "Enchufe 2"),
+        ("Tuya3", "Enchufe 3"),
+        ("Tuya4", "Enchufe 4"),
+        ("Tuya5", "Interruptor 1")
+    ]
+
+    for nombre, tipo in dispositivos_actuales:
+        cursor.execute("SELECT * FROM dispositivos WHERE nombre = ?", (nombre,))
+        if not cursor.fetchone():
+            cursor.execute(
+                "INSERT INTO dispositivos (nombre, tipo) VALUES (?, ?)",
+                (nombre, tipo)
+            )
+            print(f"💡 Dispositivo creado: {nombre} / {tipo}")
 
     conn.commit()
     conn.close()
