@@ -9,6 +9,12 @@ import threading
 import time
 
 # -------------------------------------------------------------------
+# 🌎 CONFIGURACIÓN DE ZONA HORARIA LOCAL (PERÚ)
+# -------------------------------------------------------------------
+os.environ['TZ'] = 'America/Lima'
+time.tzset()
+
+# -------------------------------------------------------------------
 # CONFIGURACIÓN GENERAL DE LA APLICACIÓN FLASK
 # -------------------------------------------------------------------
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
