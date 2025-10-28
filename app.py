@@ -11,8 +11,10 @@ import time
 # -------------------------------------------------------------------
 # 🌎 CONFIGURACIÓN DE ZONA HORARIA LOCAL (PERÚ)
 # -------------------------------------------------------------------
+# Ajuste de zona horaria a Lima (compatible Windows/Linux)
 os.environ['TZ'] = 'America/Lima'
-time.tzset()
+if hasattr(time, 'tzset'):
+    time.tzset()
 
 # -------------------------------------------------------------------
 # CONFIGURACIÓN GENERAL DE LA APLICACIÓN FLASK
