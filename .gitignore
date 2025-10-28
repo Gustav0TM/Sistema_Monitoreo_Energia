@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
 venv/
-#*.db <-- comentar o eliminar esta línea temporalmente
+*.db <-- comentar o eliminar esta línea temporalmente
 *.sqlite3
 .env
